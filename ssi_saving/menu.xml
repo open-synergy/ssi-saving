@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<menuitem
+        id="menu_root_saving"
+        name="Saving"
+        web_icon="ssi_saving,static/description/icon.png"
+    />
+
+<menuitem
+        id="menu_saving_report"
+        name="Report"
+        parent="menu_root_saving"
+        sequence="98"
+    />
+
+<menuitem
+        id="menu_saving_configuration"
+        name="Configuration"
+        parent="menu_root_saving"
+        sequence="99"
+    />
+</odoo>

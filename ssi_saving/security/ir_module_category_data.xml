@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<record id="saving_module_category" model="ir.module.category">
+    <field name="name">Saving</field>
+</record>
+
+<record id="saving_workflow_module_category" model="ir.module.category">
+    <field name="name">Saving - Workflow</field>
+    <field name="parent_id" ref="saving_module_category" />
+</record>
+
+<record id="saving_configurator_module_category" model="ir.module.category">
+    <field name="name">Saving - Configurator</field>
+    <field name="parent_id" ref="saving_module_category" />
+</record>
+
+<record id="saving_data_ownership_module_category" model="ir.module.category">
+    <field name="name">Saving - Data Ownership</field>
+    <field name="parent_id" ref="saving_module_category" />
+</record>
+
+<!-- Workflow -->
+<record id="saving_deposit_module_category" model="ir.module.category">
+    <field name="name">Saving Deposit</field>
+    <field name="parent_id" ref="saving_workflow_module_category" />
+</record>
+
+<record id="saving_withdrawal_module_category" model="ir.module.category">
+    <field name="name">Saving Withdrawal</field>
+    <field name="parent_id" ref="saving_workflow_module_category" />
+</record>
+
+<record id="saving_account_module_category" model="ir.module.category">
+    <field name="name">Saving Account</field>
+    <field name="parent_id" ref="saving_workflow_module_category" />
+</record>
+
+<!-- Data Ownership -->
+<record id="saving_deposit_data_ownership_module_category" model="ir.module.category">
+    <field name="name">Saving Deposit</field>
+    <field name="parent_id" ref="saving_data_ownership_module_category" />
+</record>
+
+<record
+        id="saving_withdrawal_data_ownership_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Saving Withdrawal</field>
+    <field name="parent_id" ref="saving_data_ownership_module_category" />
+</record>
+
+<record id="saving_account_data_ownership_module_category" model="ir.module.category">
+    <field name="name">Saving Account</field>
+    <field name="parent_id" ref="saving_data_ownership_module_category" />
+</record>
+
+</odoo>

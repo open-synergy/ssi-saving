@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_saving_type_configurator,saving_type - configurator,model_saving_type,saving_type_group,1,1,1,1
+access_saving_type_all,saving_type - all user,model_saving_type,,1,0,0,0
+access_saving_account_all,saving_account - all,model_saving_account,,1,0,0,0
+access_saving_account_viewer,saving_account - viewer,model_saving_account,saving_account_viewer_group,1,0,0,0
+access_saving_account_user,saving_account - user,model_saving_account,saving_account_user_group,1,1,1,1
