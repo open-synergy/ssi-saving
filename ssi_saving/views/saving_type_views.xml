@@ -37,7 +37,37 @@
             <xpath expr="//notebook/page[@name='note']" position="before">
                 <page name="interest" string="Interest">
                     <group name="interest_1" colspan="4" col="2">
-                        <field name="interest_amount" />
+                        <label for="interest_rate" string="Amount (p.a)" />
+                        <div>
+                            <field name="interest_rate" />
+                            %
+                        </div>
+                        <field
+                                name="interest_calculation_method"
+                                string="Calculation  Method"
+                            />
+                        <field name="interest_period_type_id" string="Period" />
+                    </group>
+                    <group name="interest_1" colspan="4" col="2">
+                        <field name="interest_cron_id" />
+                        <div>
+                            <button
+                                    name="action_create_interest_cron"
+                                    string="Interest Cron"
+                                    type="object"
+                                    icon="fa-file"
+                                    class="oe_highlight"
+                                    attrs="{'invisible':[('interest_cron_id','!=',False)]}"
+                                />
+                            <button
+                                    name="action_delete_interest_cron"
+                                    string="Interest Cron"
+                                    type="object"
+                                    icon="fa-eraser"
+                                    class="oe_highlight"
+                                    attrs="{'invisible':[('interest_cron_id','=',False)]}"
+                                />
+                        </div>
                     </group>
                 </page>
                 <page name="accounting" string="Accounting">
@@ -47,6 +77,12 @@
                             <field name="account_id" />
                             <field name="analytic_account_group_id" />
                         </group>
+                        <group name="accounting_1_2" colspan="1" col="2">
+                            <field name="interest_account_id" />
+                            <field name="interest_journal_id" />
+                            <field name="interest_tax_ids" widget="many2many_tags" />
+                        </group>
+
                     </group>
                 </page>
             </xpath>

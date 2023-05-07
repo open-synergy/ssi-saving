@@ -135,6 +135,13 @@ class SavingAccount(models.Model):
         compute="_compute_total",
         store=True,
     )
+
+    balance_ids = fields.One2many(
+        string="Daily Balance",
+        comodel_name="saving_account_balance",
+        inverse_name="saving_account_id",
+        readonly=False,
+    )
     state = fields.Selection(
         string="State",
         selection=[
@@ -185,6 +192,10 @@ class SavingAccount(models.Model):
         if self.type_id:
             self.analytic_account_group_id = self.type_id.analytic_account_group_id
 
+    def action_compute_daily_balance(self):
+        for record in self.sudo():
+            record._compute_daily_balance()
+
     @ssi_decorator.post_open_action()
     def _create_analytic_account(self):
         if self.analytic_account_id:
@@ -203,3 +214,74 @@ class SavingAccount(models.Model):
             "name": self.name,
             "code": self.name,
         }
+
+    def _compute_daily_balance(self, date_balance=False):
+        self.ensure_one()
+        DailyBalance = self.env["saving_account_balance"]
+
+        if not date_balance:
+            date_balance = fields.Date.today()
+
+        criteria = [
+            ("date", "=", date_balance),
+            ("saving_account_id", "=", self.id),
+        ]
+
+        balances = DailyBalance.search(criteria)
+
+        if len(balances) == 0:
+            self._create_daily_balance(date_balance)
+
+    def _create_daily_balance(self, date_balance):
+        self.ensure_one()
+        DailyBalance = self.env["saving_account_balance"]
+        DailyBalance.create(self._prepare_create_daily_balance(date_balance))
+
+    def _prepare_create_daily_balance(self, date_balance):
+        self.ensure_one()
+        balance_amount = 0.0
+        previous_daily_balance = self._get_previous_balance(date_balance)
+
+        if previous_daily_balance:
+            balance_amount = previous_daily_balance.balance
+
+        additional_balance_amount = self._get_additional_balance_amount(
+            date_balance, previous_daily_balance
+        )
+
+        return {
+            "saving_account_id": self.id,
+            "date": date_balance,
+            "balance": balance_amount + additional_balance_amount,
+        }
+
+    def _get_previous_balance(self, date_balance):
+        self.ensure_one()
+        DailyBalance = self.env["saving_account_balance"]
+        criteria = [
+            ("date", "<", date_balance),
+            ("saving_account_id", "=", self.id),
+        ]
+        daily_balance = DailyBalance.search(criteria, limit=1)
+
+        if len(daily_balance) == 1:
+            return daily_balance
+        else:
+            return False
+
+    def _get_additional_balance_amount(self, date_balance, previous_daily_balance):
+        AnalyticLine = self.env["account.analytic.line"]
+        result = 0.0
+        criteria = [
+            ("date", "<=", date_balance),
+            ("account_id", "=", self.analytic_account_id.id),
+        ]
+
+        if previous_daily_balance:
+            criteria += [("date", ">=", previous_daily_balance.date)]
+
+        # TODO: Refactor
+        for line in AnalyticLine.search(criteria):
+            result += line.amount
+
+        return result

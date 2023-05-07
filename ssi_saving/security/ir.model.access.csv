@@ -4,3 +4,12 @@ access_saving_type_all,saving_type - all user,model_saving_type,,1,0,0,0
 access_saving_account_all,saving_account - all,model_saving_account,,1,0,0,0
 access_saving_account_viewer,saving_account - viewer,model_saving_account,saving_account_viewer_group,1,0,0,0
 access_saving_account_user,saving_account - user,model_saving_account,saving_account_user_group,1,1,1,1
+access_saving_account_balance_all,saving_account_balance - all,model_saving_account_balance,,1,0,0,0
+access_saving_account_balance_viewer,saving_account_balance - viewer,model_saving_account_balance,saving_account_viewer_group,1,0,0,0
+access_saving_account_balance_user,saving_account_balance - user,model_saving_account_balance,saving_account_user_group,1,1,1,1
+access_saving_interest_computation_all,saving_interest_computation - all,model_saving_interest_computation,,1,0,0,0
+access_saving_interest_computation_viewer,saving_interest_computation - viewer,model_saving_interest_computation,saving_interest_computation_viewer_group,1,0,0,0
+access_saving_interest_computation_user,saving_interest_computation - user,model_saving_interest_computation,saving_interest_computation_user_group,1,1,1,1
+access_saving_interest_computation_tax_all,saving_interest_computation_tax - all,model_saving_interest_computation_tax,,1,0,0,0
+access_saving_interest_computation_tax_viewer,saving_interest_computation_tax - viewer,model_saving_interest_computation_tax,saving_interest_computation_viewer_group,1,0,0,0
+access_saving_interest_computation_tax_user,saving_interest_computation_tax - user,model_saving_interest_computation_tax,saving_interest_computation_user_group,1,1,1,1

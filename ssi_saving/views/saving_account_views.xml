@@ -58,6 +58,38 @@
                 <page name="detail" string="Details">
                     <field name="transaction_ids" />
                 </page>
+                <page name="balance" string="Balance">
+                    <button
+                            name="action_compute_daily_balance"
+                            string="Daily Balances"
+                            type="object"
+                            icon="fa-refresh"
+                            class="oe_highlight"
+                        />
+                    <field name="balance_ids">
+                        <tree>
+                            <field name="date" />
+                            <field name="balance" />
+                            <button
+                                    name="action_compute_next_day_balance"
+                                    icon="fa-cogs"
+                                    help="Compute Next Day Balance"
+                                    type="object"
+                                />
+                        </tree>
+                        <form>
+                            <group name="balance_form_1" colspan="4" col="2">
+                                <group name="balance_form_1_1" colspan="1" col="2">
+                                    <field name="date" />
+                                    <field name="currency_id" invisible="1" />
+                                    <field name="balance" />
+                                </group>
+                                <group name="balance_form_1_2" colspan="1" col="2">
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
                 <page name="analytic" string="Analytic">
                     <group name="analytic_1" colspan="4" col="2">
                         <field name="analytic_account_group_id" />

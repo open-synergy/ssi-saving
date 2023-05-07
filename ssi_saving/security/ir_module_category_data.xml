@@ -38,6 +38,11 @@
     <field name="parent_id" ref="saving_workflow_module_category" />
 </record>
 
+<record id="saving_interest_computation_module_category" model="ir.module.category">
+    <field name="name">Saving Account Interest Computation</field>
+    <field name="parent_id" ref="saving_workflow_module_category" />
+</record>
+
 <!-- Data Ownership -->
 <record id="saving_deposit_data_ownership_module_category" model="ir.module.category">
     <field name="name">Saving Deposit</field>
@@ -56,5 +61,15 @@
     <field name="name">Saving Account</field>
     <field name="parent_id" ref="saving_data_ownership_module_category" />
 </record>
+
+<record
+        id="saving_interest_computation_data_ownership_module_category"
+        model="ir.module.category"
+    >
+    <field name="name">Saving Account Interest Computation</field>
+    <field name="parent_id" ref="saving_data_ownership_module_category" />
+</record>
+
+
 
 </odoo>

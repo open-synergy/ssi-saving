@@ -14,5 +14,16 @@
     <field name="use_date_range" eval="1" />
     <field eval="False" name="company_id" />
 </record>
+
+<record id="sequence1" model="ir.sequence">
+    <field name="name">Saving Account Interest Computation</field>
+    <field name="code">saving_interest_computation</field>
+    <field name="prefix">SIC/%(range_y)s/</field>
+    <field eval="1" name="number_next" />
+    <field eval="1" name="number_increment" />
+    <field name="padding" eval="6" />
+    <field name="use_date_range" eval="1" />
+    <field eval="False" name="company_id" />
+</record>
 </data>
 </odoo>

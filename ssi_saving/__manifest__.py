@@ -3,7 +3,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 {
     "name": "Saving",
-    "version": "14.0.1.0.0",
+    "version": "14.0.2.0.0",
     "website": "https://simetri-sinergi.id",
     "author": "PT. Simetri Sinergi Indonesia, OpenSynergy Indonesia",
     "license": "LGPL-3",
@@ -17,6 +17,7 @@
         "ssi_transaction_cancel_mixin",
         "ssi_currency_mixin",
         "ssi_financial_accounting",
+        "date_range",
     ],
     "data": [
         "security/ir_module_category_data.xml",
@@ -30,6 +31,7 @@
         "menu.xml",
         "views/saving_type_views.xml",
         "views/saving_account_views.xml",
+        "views/saving_interest_computation_views.xml",
     ],
     "demo": [],
 }

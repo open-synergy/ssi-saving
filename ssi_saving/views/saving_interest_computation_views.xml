@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2022 OpenSynergy Indonesia
+     Copyright 2022 PT. Simetri Sinergi Indonesia
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl). -->
+<odoo>
+<record id="saving_interest_computation_view_search" model="ir.ui.view">
+    <field name="name">saving_interest_computation - search</field>
+    <field name="model">saving_interest_computation</field>
+    <field
+            name="inherit_id"
+            ref="ssi_transaction_mixin.mixin_transaction_view_search"
+        />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data>
+        </data>
+    </field>
+</record>
+
+<record id="saving_interest_computation_view_tree" model="ir.ui.view">
+    <field name="name">saving_interest_computation - tree</field>
+    <field name="model">saving_interest_computation</field>
+    <field name="mode">primary</field>
+    <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_tree" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="saving_account_id" />
+                <field name="partner_id" />
+                <field name="date" />
+                <field name="date_start" />
+                <field name="date_end" />
+                <field name="calculation_method" />
+                <field name="interest_rate" />
+                <field name="base_amount" />
+                <field name="interest_amount" />
+                <field name="tax_amount" />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="saving_interest_computation_view_form" model="ir.ui.view">
+    <field name="name">saving_interest_computation - form</field>
+    <field name="model">saving_interest_computation</field>
+    <field name="mode">primary</field>
+    <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_form" />
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//button[1]" position="before">
+                <button
+                        name="action_recompute"
+                        string="Recompute"
+                        type="object"
+                        attrs="{'invisible':[('state','!=','draft')]}"
+                    />
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="saving_account_id" />
+                <field name="partner_id" />
+                <field name="currency_id" />
+            </xpath>
+            <xpath expr="//group[@name='header_right']" position="inside">
+                <field name="date" />
+                <field name="period_id" />
+                <field name="date_start" />
+                <field name="date_end" />
+                <field name="num_of_days" />
+            </xpath>
+            <xpath expr="//page[1]" position="before">
+                <page name="interest" string="Interest">
+                    <group name="interest_1" colspan="4" col="2">
+                        <group name="interest_1_1" colspan="1" col="2">
+                            <field name="interest_rate" />
+                            <field name="calculation_method" />
+                            <field name="tax_ids" widget="many2many_tags" />
+                        </group>
+                        <group name="interest_1_2" colspan="1" col="2">
+                            <field name="base_amount" />
+                            <field name="interest_amount" />
+                            <field name="tax_amount" />
+                        </group>
+                    </group>
+                </page>
+                <page name="balance" string="Balance">
+                    <button
+                            name="action_recompute_balance"
+                            type="object"
+                            string="Daily Balances"
+                            icon="fa-refresh"
+                            class="oe_highlight"
+                            attrs="{'invisible':[('state','!=','draft')]}"
+                        />
+                    <group name="balance_1" colspan="4" col="2">
+                        <group name="balance_1" colspan="1" col="2">
+                            <field name="ending_balance_amount" string="Ending" />
+                            <field name="average_balance_amount" string="Average" />
+                            <field name="lowest_balance_amount" string="Lowest" />
+                        </group>
+                    </group>
+                    <field name="balance_ids">
+                        <tree>
+                            <field name="date" />
+                            <field name="balance" />
+                        </tree>
+                        <form>
+                            <group name="balance_form_1" colspan="4" col="2">
+                                <group name="balance_form_1_1" colspan="1" col="2">
+                                    <field name="date" />
+                                    <field name="currency_id" invisible="1" />
+                                    <field name="balance" />
+                                </group>
+                                <group name="balance_form_1_2" colspan="1" col="2">
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+                <page name="tax" string="Taxes">
+                    <button
+                            name="action_compute_tax"
+                            type="object"
+                            string="Taxes"
+                            icon="fa-refresh"
+                            class="oe_highlight"
+                            attrs="{'invisible':[('state','!=','draft')]}"
+                        />
+                    <field name="tax_computation_ids">
+                        <tree>
+                            <field name="tax_id" />
+                            <field name="account_id" />
+                            <field name="base_amount" />
+                            <field name="tax_amount" />
+                            <field name="manual" invisible="1" />
+                        </tree>
+                        <form>
+                            <group name="tax_form_1" colspan="4" col="2">
+                                <group name="tax_form_1_1" colspan="1" col="2">
+                                    <field name="tax_id" />
+                                    <field name="account_id" />
+                                </group>
+                                <group name="tax_form_1_2" colspan="1" col="2">
+                                    <field name="base_amount" />
+                                    <field name="tax_amount" />
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+                <page name="accounting" string="Accounting">
+                    <group name="accounting_1" colspan="4" col="2">
+                        <group name="accounting_1_1" colspan="1" col="2">
+                            <field name="account_id" />
+                            <field name="interest_account_id" />
+                            <field name="journal_id" />
+                        </group>
+                        <group name="accounting_1_2" colspan="1" col="2">
+                            <field name="move_id" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="saving_interest_computation_action" model="ir.actions.act_window">
+    <field name="name">Saving Account Interest Computations</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">saving_interest_computation</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="saving_interest_computation_menu"
+        name="Interest Computations"
+        parent="menu_root_saving"
+        action="saving_interest_computation_action"
+        groups="saving_interest_computation_viewer_group"
+        sequence="20"
+    />
+
+</odoo>
