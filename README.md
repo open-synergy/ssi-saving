@@ -14,7 +14,11 @@ ssi-saving
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[ssi_saving](ssi_saving/) | 14.0.2.0.0 |  | Saving
 
 [//]: # (end addons)
 
