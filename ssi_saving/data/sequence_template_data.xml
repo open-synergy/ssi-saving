@@ -2,8 +2,7 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0-standalone.html). -->
-<odoo>
-<data noupdate="1">
+<odoo noupdate="1">
 <record id="sequence_template" model="sequence.template">
     <field name="name">Standard</field>
     <field name="model_id" ref="model_saving_account" />
@@ -45,5 +44,4 @@
     <field name="add_custom_prefix" eval="0" />
     <field name="add_custom_suffix" eval="0" />
 </record>
-</data>
 </odoo>

@@ -2,8 +2,7 @@
 <!-- Copyright 2022 OpenSynergy Indonesia
      Copyright 2022 PT. Simetri Sinergi Indonesia
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0-standalone.html). -->
-<odoo>
-<data noupdate="1">
+<odoo noupdate="1">
 <record id="policy_template" model="policy.template">
     <field name="name">Standard</field>
     <field name="model_id" ref="model_saving_account" />
@@ -299,5 +298,4 @@ if env.user.id in document.active_approver_user_ids.ids:
             />
     <field name="restrict_additional" eval="0" />
 </record>
-</data>
 </odoo>
