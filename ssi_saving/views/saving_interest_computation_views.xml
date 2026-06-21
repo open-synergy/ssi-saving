@@ -13,6 +13,34 @@
     <field name="mode">primary</field>
     <field name="arch" type="xml">
         <data>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="saving_account_id" />
+                <field name="partner_id" />
+                <field name="period_id" />
+                <field name="calculation_method" />
+            </xpath>
+            <xpath expr="//filter[@name='grp_responsible']" position="after">
+                <filter
+                        name="grp_saving_account"
+                        string="Saving Account"
+                        context="{'group_by':'saving_account_id'}"
+                    />
+                <filter
+                        name="grp_partner"
+                        string="Partner"
+                        context="{'group_by':'partner_id'}"
+                    />
+                <filter
+                        name="grp_period"
+                        string="Period"
+                        context="{'group_by':'period_id'}"
+                    />
+                <filter
+                        name="grp_calculation_method"
+                        string="Calculation Method"
+                        context="{'group_by':'calculation_method'}"
+                    />
+            </xpath>
         </data>
     </field>
 </record>
