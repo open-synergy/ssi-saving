@@ -26,10 +26,7 @@
 <record id="saving_interest_computation_view_search" model="ir.ui.view">
     <field name="name">saving_interest_computation search</field>
     <field name="model">saving_interest_computation</field>
-    <field
-            name="inherit_id"
-            ref="ssi_saving.saving_interest_computation_view_search"
-        />
+    <field name="inherit_id" ref="ssi_saving.saving_interest_computation_view_search" />
     <field name="arch" type="xml">
         <data>
             <xpath expr="//field[@name='company_id']" position="after">

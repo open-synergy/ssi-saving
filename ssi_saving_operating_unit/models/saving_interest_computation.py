@@ -5,9 +5,7 @@
 from odoo import models
 
 
-class SavingInterestComputation(
-    models.Model
-):  # pylint: disable=too-few-public-methods
+class SavingInterestComputation(models.Model):  # pylint: disable=too-few-public-methods
     _name = "saving_interest_computation"
     _inherit = [
         "saving_interest_computation",

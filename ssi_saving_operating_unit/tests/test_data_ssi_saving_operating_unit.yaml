@@ -57,7 +57,8 @@ setup:
       model: "date.range.type"
       save_as: "period_type"
       values:
-        name: "EVAL: 'Saving OU Test Period Type ' + datetime.now().strftime('%H%M%S%f')"
+        name:
+          "EVAL: 'Saving OU Test Period Type ' + datetime.now().strftime('%H%M%S%f')"
 
     - step: "Create interest tax"
       action: "create"
@@ -183,7 +184,9 @@ scenarios:
         values:
           interest: 6.0
 
-  - name: "Saving Account Interest Computation - ir.rule denies access outside assigned operating unit"
+  - name:
+      "Saving Account Interest Computation - ir.rule denies access outside assigned
+      operating unit"
     steps:
       - step: "Create interest computation period"
         action: "create"
