@@ -19,6 +19,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [ssi_saving](ssi_saving/) | 14.0.2.0.0 |  | Saving
+[ssi_saving_operating_unit](ssi_saving_operating_unit/) | 14.0.1.0.0 |  | Saving + Operating Unit
 
 [//]: # (end addons)
 
