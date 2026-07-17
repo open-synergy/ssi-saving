@@ -1,0 +1,250 @@
+setup:
+  steps:
+    - step: "Create partner"
+      action: "create"
+      model: "res.partner"
+      save_as: "partner"
+      values:
+        name: "Saving OU Test Partner"
+        is_company: false
+
+    - step: "Get current assets account type"
+      action: "ref"
+      xml_id: "account.data_account_type_current_assets"
+      save_as: "account_type_asset"
+
+    - step: "Get expenses account type"
+      action: "ref"
+      xml_id: "account.data_account_type_expenses"
+      save_as: "account_type_expense"
+
+    - step: "Create analytic account group"
+      action: "create"
+      model: "account.analytic.group"
+      save_as: "aa_group"
+      values:
+        name: "Saving OU Test Analytic Group"
+
+    - step: "Create saving GL account"
+      action: "create"
+      model: "account.account"
+      save_as: "gl_account"
+      values:
+        name: "Saving OU Test Account"
+        code: "EVAL: 'SVA' + datetime.now().strftime('%H%M%S%f')"
+        user_type_id: "REC: account_type_asset.id"
+
+    - step: "Create interest GL account"
+      action: "create"
+      model: "account.account"
+      save_as: "interest_account"
+      values:
+        name: "Saving OU Test Interest Account"
+        code: "EVAL: 'SVB' + datetime.now().strftime('%H%M%S%f')"
+        user_type_id: "REC: account_type_expense.id"
+
+    - step: "Create interest journal"
+      action: "create"
+      model: "account.journal"
+      save_as: "journal"
+      values:
+        name: "EVAL: 'Saving OU Test Journal ' + datetime.now().strftime('%H%M%S%f')"
+        code: "SVOUJ"
+        type: "general"
+
+    - step: "Create interest period type"
+      action: "create"
+      model: "date.range.type"
+      save_as: "period_type"
+      values:
+        name: "EVAL: 'Saving OU Test Period Type ' + datetime.now().strftime('%H%M%S%f')"
+
+    - step: "Create interest tax"
+      action: "create"
+      model: "account.tax"
+      save_as: "tax"
+      values:
+        name: "EVAL: 'Saving OU Test Tax ' + datetime.now().strftime('%H%M%S%f')"
+        type_tax_use: "none"
+        amount_type: "percent"
+        amount: 0.0
+
+    - step: "Create saving type"
+      action: "create"
+      model: "saving_type"
+      save_as: "saving_type"
+      values:
+        name: "Saving OU Test Type"
+        code: "/"
+        currency_id: "REF: base.USD"
+        account_id: "REC: gl_account.id"
+        analytic_account_group_id: "REC: aa_group.id"
+        interest_account_id: "REC: interest_account.id"
+        interest_journal_id: "REC: journal.id"
+        interest_period_type_id: "REC: period_type.id"
+        interest_tax_ids: [[6, 0, ["REC: tax.id"]]]
+
+    - step: "Create saving account with operating_unit_id"
+      action: "create"
+      model: "saving_account"
+      save_as: "saving_account"
+      values:
+        date: "2024-01-01"
+        partner_id: "REC: partner.id"
+        type_id: "REC: saving_type.id"
+        interest: 5.0
+        analytic_account_group_id: "REC: aa_group.id"
+        operating_unit_id: "REF: operating_unit.main_operating_unit"
+
+scenarios:
+  - name: "Saving Account - Operating Unit is set"
+    steps:
+      - step: "Assert saving_account operating_unit_id is set"
+        action: "assert"
+        target: "saving_account"
+        asserts:
+          operating_unit_id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Saving Account Interest Computation - Operating Unit is set"
+    steps:
+      - step: "Create interest computation period"
+        action: "create"
+        model: "date.range"
+        save_as: "period"
+        values:
+          name: "Saving OU Test Period"
+          type_id: "REC: period_type.id"
+          date_start: "2024-01-01"
+          date_end: "2024-01-31"
+
+      - step: "Create saving interest computation with operating_unit_id"
+        action: "create"
+        model: "saving_interest_computation"
+        save_as: "interest_computation"
+        values:
+          saving_account_id: "REC: saving_account.id"
+          date: "2024-02-01"
+          period_id: "REC: period.id"
+          interest_rate: 5.0
+          account_id: "REC: gl_account.id"
+          interest_account_id: "REC: interest_account.id"
+          journal_id: "REC: journal.id"
+          operating_unit_id: "REF: operating_unit.main_operating_unit"
+
+      - step: "Assert saving_interest_computation operating_unit_id is set"
+        action: "assert"
+        target: "interest_computation"
+        asserts:
+          operating_unit_id:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Saving Account - ir.rule denies access outside assigned operating unit"
+    steps:
+      - step: "Create user restricted to a different operating unit"
+        action: "create"
+        model: "res.users"
+        save_as: "restricted_user"
+        values:
+          name: "Saving Account OU Restricted User"
+          login: "ou_restricted_saving_account@example.com"
+          groups_id:
+            [
+              [
+                6,
+                0,
+                [
+                  "REF: base.group_user",
+                  "REF: ssi_saving.saving_account_user_group",
+                  "REF: ssi_saving_operating_unit.saving_account_ou_group",
+                ],
+              ],
+            ]
+          assigned_operating_unit_ids: [[6, 0, []]]
+
+      - step: "Restricted user cannot read the record outside their operating unit"
+        action: "call"
+        target: "saving_account"
+        method: "read"
+        as_user: "restricted_user"
+        args:
+          - ["operating_unit_id"]
+        expect_error:
+          type: "AccessError"
+
+      - step: "Restricted user cannot write the record outside their operating unit"
+        action: "write"
+        target: "saving_account"
+        as_user: "restricted_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          interest: 6.0
+
+  - name: "Saving Account Interest Computation - ir.rule denies access outside assigned operating unit"
+    steps:
+      - step: "Create interest computation period"
+        action: "create"
+        model: "date.range"
+        save_as: "period"
+        values:
+          name: "Saving OU Test Period"
+          type_id: "REC: period_type.id"
+          date_start: "2024-01-01"
+          date_end: "2024-01-31"
+
+      - step: "Create saving interest computation with operating_unit_id"
+        action: "create"
+        model: "saving_interest_computation"
+        save_as: "interest_computation"
+        values:
+          saving_account_id: "REC: saving_account.id"
+          date: "2024-02-01"
+          period_id: "REC: period.id"
+          interest_rate: 5.0
+          account_id: "REC: gl_account.id"
+          interest_account_id: "REC: interest_account.id"
+          journal_id: "REC: journal.id"
+          operating_unit_id: "REF: operating_unit.main_operating_unit"
+
+      - step: "Create user restricted to a different operating unit"
+        action: "create"
+        model: "res.users"
+        save_as: "restricted_user"
+        values:
+          name: "Saving Interest Computation OU Restricted User"
+          login: "ou_restricted_saving_interest_computation@example.com"
+          groups_id:
+            [
+              [
+                6,
+                0,
+                [
+                  "REF: base.group_user",
+                  "REF: ssi_saving.saving_interest_computation_user_group",
+                  "REF: ssi_saving_operating_unit.saving_interest_computation_ou_group",
+                ],
+              ],
+            ]
+          assigned_operating_unit_ids: [[6, 0, []]]
+
+      - step: "Restricted user cannot read the record outside their operating unit"
+        action: "call"
+        target: "interest_computation"
+        method: "read"
+        as_user: "restricted_user"
+        args:
+          - ["operating_unit_id"]
+        expect_error:
+          type: "AccessError"
+
+      - step: "Restricted user cannot write the record outside their operating unit"
+        action: "write"
+        target: "interest_computation"
+        as_user: "restricted_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          interest_rate: 6.0
